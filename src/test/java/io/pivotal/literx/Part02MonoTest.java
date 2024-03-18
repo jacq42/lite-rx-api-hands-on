@@ -53,7 +53,11 @@ public class Part02MonoTest {
 	public void error() {
 		Mono<String> mono = workshop.errorMono();
 		StepVerifier.create(mono)
-				.verifyError(IllegalStateException.class);
+				.verifyErrorMatches(throwable -> {
+					final boolean isIllegalStateException = throwable instanceof IllegalStateException;
+					final boolean hasErrorMessage = "error".equals(throwable.getMessage());
+					return isIllegalStateException && hasErrorMessage;
+				});
 	}
 
 }
