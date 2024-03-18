@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * Learn how to use various other operators.
+ * 
+ * Link: https://tech.io/playgrounds/929/reactive-programming-with-reactor-3/OthersOperations
  *
  * @author Sebastien Deleuze
  */
