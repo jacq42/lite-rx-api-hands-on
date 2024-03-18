@@ -17,7 +17,7 @@ public class Part06Request {
 
 //========================================================================================
 
-	// TODO Create a StepVerifier that initially requests all values and expect 4 values to be received
+	// Create a StepVerifier that initially requests all values and expect 4 values to be received
 	StepVerifier requestAllExpectFour(Flux<User> flux) {
 		return StepVerifier.withVirtualTime(() -> flux)
 				.expectSubscription()
@@ -28,20 +28,20 @@ public class Part06Request {
 
 //========================================================================================
 
-	// TODO Create a StepVerifier that initially requests 1 value and expects User.SKYLER then requests another value and expects User.JESSE then stops verifying by cancelling the source
+	// Create a StepVerifier that initially requests 1 value and expects User.SKYLER then requests another value and expects User.JESSE then stops verifying by cancelling the source
 	StepVerifier requestOneExpectSkylerThenRequestOneExpectJesse(Flux<User> flux) {
 		return StepVerifier.withVirtualTime(() -> flux)
 				.expectSubscription()
-				.expectNextCount(1)
-				.assertNext(User.SKYLER::equals)
-				.expectNextCount(1)
-				.assertNext(User.JESSE::equals)
+				.thenRequest(1L)
+				.expectNextMatches(User.SKYLER::equals)
+				.thenRequest(1L)
+				.expectNextMatches(User.JESSE::equals)
 				.thenCancel();
 	}
 
 //========================================================================================
 
-	// TODO Return a Flux with all users stored in the repository that prints automatically logs for all Reactive Streams signals
+	// Return a Flux with all users stored in the repository that prints automatically logs for all Reactive Streams signals
 	Flux<User> fluxWithLog() {
 		return repository.findAll()
 				.log();
@@ -49,11 +49,11 @@ public class Part06Request {
 
 //========================================================================================
 
-	// TODO Return a Flux with all users stored in the repository that prints "Starring:" at first, "firstname lastname" for all values and "The end!" on complete
+	// Return a Flux with all users stored in the repository that prints "Starring:" at first, "firstname lastname" for all values and "The end!" on complete
 	Flux<User> fluxWithDoOnPrintln() {
 		return repository.findAll()
 				.doFirst(() -> System.out.println("Starring:"))
-				.doOnNext(user -> System.out.println(user.getFirstname() + " " + user.getLastname()))
+				.doOnNext(user -> System.out.printf("%s %s%n", user.getFirstname(), user.getLastname()))
 				.doOnComplete(() -> System.out.println("The end!"));
 	}
 
